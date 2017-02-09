@@ -5,7 +5,11 @@ let curCwd;
 let uids = {};
 
 const setCwd = (store, pid) =>
-  exec(`lsof -p ${pid} | grep cwd | tr -s ' ' | cut -d ' ' -f9-`, (err, newCwd) => {
+  let command = /^win/.test(process.platform) ?
+    'cd' :
+    `lsof -p ${pid} | grep cwd | tr -s ' ' | cut -d ' ' -f9-`
+    ;
+  exec(command, (err, newCwd) => {
     if (err) {
       console.error(err);
     } else {
